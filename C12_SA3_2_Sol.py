@@ -43,6 +43,8 @@ head_rect = pygame.draw.rect(display, "green", head_coord)
 body_coords = []
 # Game loop
 running = True
+gameover=False
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:  # Detect window close
@@ -72,9 +74,20 @@ while running:
 
     #Check for game over
     if head_rect.left < 0 or head_rect.right > WINDOW_WIDTH or head_rect.top < 0 or head_rect.bottom > WINDOW_HEIGHT or head_coord in body_coords:
+       
        display.blit(game_over_text, game_over_rect)
-  
+       gameover=True
        pygame.display.update()
+
+    if gameover:
+        display.fill("black")  # Clear screen
+        display.blit(game_over_text, game_over_rect)  # Display "GAME OVER"
+        pygame.display.update()  # Update screen
+
+        pygame.time.delay(2000)  # Pause for 2 seconds
+
+        running = False  # Exit game loop
+
 
     if head_rect.colliderect(apple_rect):
         score+=1
@@ -87,7 +100,7 @@ while running:
 
     score_text = font.render("Score: " + str(score), True, "green")
     # Fill the screen with a white background
-    display.fill((255, 255, 255))
+    display.fill("black")
 
     display.blit(score_text, score_rect)
     for body in body_coords:
